@@ -127,7 +127,7 @@ class Captions:
             return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path)
 
     def get_translated_captions_by_name(self, name: str) -> Caption:
-        filtered_captions = list(filter((lambda subtitle: subtitle['name'] == name),
+        filtered_captions = list(filter((lambda subtitle: subtitle['name'].lower() == name.lower()),
                                         self.__translations))
         if len(filtered_captions) > 0:
             return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path)
