@@ -22,12 +22,12 @@ class Caption:
         self.raw_caption_data = caption_data
         self._dl_api = api
         self.title = title
-        self.lang = str(find(caption_data['name']))
+        self.lang = ('a.' if 'auto-generated' in caption_data.get('name') else '') + str(find(caption_data['name']))
         self.download_dir = download_path
 
     def srt(self, content=False, download_path: str | None = None, filename: str | None = None):
         params = {
-            'title': f'{self.title}-{self.lang}',
+            'title': f'{self.title}-({self.lang})',
             'url': self.raw_caption_data['url'],
         }
         response = requests.get(self._dl_api, params=params)
@@ -49,7 +49,7 @@ class Caption:
 
     def txt(self, content=False, download_path: str | None = None, filename: str | None = None):
         params = {
-            'title': f'{self.title}-{self.lang}',
+            'title': f'{self.title}-({self.lang})',
             'url': self.raw_caption_data['url'],
             'type': 'txt'
         }
@@ -73,7 +73,7 @@ class Caption:
     @property
     def raw(self):
         params = {
-            'title': f'{self.title}-{self.lang}',
+            'title': f'{self.title}-({self.lang})',
             'url': self.raw_caption_data['url'],
             'type': 'raw'
         }
