@@ -231,7 +231,10 @@ print(vid.captions.get_translated_captions_by_name('Basque'))
 print(vid.captions.get_translated_captions_by_name('Basque').srt())
 print(vid.captions.get_translated_captions_by_lang_code('fr'))
 print(vid.captions.get_translated_captions_by_lang_code('fr').srt())
-print(vid.streams.filter(is_audio=True)[2].download())
+# print(vid.streams.filter(is_audio=True)[2].download())
+
+for aud in vid.streams.filter(is_audio=True):
+    print(aud)
 
 
 """
