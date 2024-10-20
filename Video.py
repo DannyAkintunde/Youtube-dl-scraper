@@ -8,6 +8,7 @@ from Caption import Captions
 
 class Video:
     _quality_regex = r'\((\d+p)(\d+)?(\s[A-z]{2,3})?\)'
+    _bit_rate_pattern = ['48kbps', '128kbps', '32kbps']
 
     def __init__(self, view_url: str, raw_html, caption_data, download_path: str):
         self.captions = None
@@ -50,15 +51,20 @@ class Video:
         # print(streams_data)
 
         self.streams = StreamArray()
+        
+        # this works but note it through observation from the site
 
+        bit_rate_index = 0
         for stream in streams_data_a:
             url = stream['href']
             text = stream.get_text()
             if 'mp3' in text.lower():
-                st_ins = Stream(url=url, download_path=self.download_path, is_audio=True, frame_rate=0, title=self.title)
+                bit_rate = YouTube._bit_rate_pattern[bit_rate_index]
+                st_ins = Stream(url=url, download_path=self.download_path, is_audio=True, frame_rate=0, title=self.title, bit_rate = bit_rate)
                 self.streams._append(st_ins)
+                bit_rate_index += 1
             if re.search(self._quality_regex, text):
-                resolution, frame_rate, hdr = re.search(self._quality_regex, text).groups()
+                resolution, frame_rate, hdr = re.search(YouTube._quality_regex, text).groups()
                 st_ins = Stream(url=url,
                                 frame_rate=(frame_rate or 30),
                                 resolution=resolution, is_hdr=bool(hdr),
