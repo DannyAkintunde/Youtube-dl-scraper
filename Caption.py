@@ -18,14 +18,16 @@ def get_filename_from_cd(cd):
 
 class Caption:
 
-    def __init__(self, caption_data: dict, api: str, title: str, download_path: str):
+    def __init__(self, caption_data: dict, api: str, title: str, download_path: str, translated: bool = False):
         self.raw_caption_data = caption_data
         self._dl_api = api
         self.title = title
+        self.translated = translated
         self.lang = ('a.' if 'auto-generated' in caption_data.get('name') else '') + str(find(caption_data['name']))
         self.download_dir = download_path
 
-    def srt(self, content=False, download_path: str | None = None, filename: str | None = None):
+    def srt(self, content=False, download_path: str | None = None, filename: str | None = None,
+            skip_existent: bool = False):
         params = {
             'title': f'{self.title}-({self.lang})',
             'url': self.raw_caption_data['url'],
@@ -36,6 +38,13 @@ class Caption:
             filename = filename or get_filename_from_cd(response.headers.get('content-disposition'))
             download_path = download_path or self.download_dir
             filepath = Path(download_path).joinpath(filename)
+
+            if filepath.exists() and skip_existent:
+                if filepath.stat().st_size == len(response.content):
+                    print('skipping save because file already exists')
+                    return
+
+            print("Saving file")
 
             try:
                 with filepath.open('wb') as file:
@@ -47,7 +56,7 @@ class Caption:
         else:
             return response.content.decode('utf-8')
 
-    def txt(self, content=False, download_path: str | None = None, filename: str | None = None):
+    def txt(self, content=False, download_path: str | None = None, filename: str | None = None, skip_existent: bool = False):
         params = {
             'title': f'{self.title}-({self.lang})',
             'url': self.raw_caption_data['url'],
@@ -59,6 +68,13 @@ class Caption:
             filename = filename or get_filename_from_cd(response.headers.get('content-disposition'))
             download_path = download_path or self.download_dir
             filepath = Path(download_path).joinpath(filename)
+
+            if filepath.exists() and skip_existent:
+                if filepath.stat().st_size == len(response.content):
+                    print('skipping save because file already exists')
+                    return
+                else:
+                    print("Saving file")
 
             try:
                 with filepath.open('wb') as file:
@@ -81,6 +97,9 @@ class Caption:
         response.raise_for_status()
 
         return response.text
+
+    def __str__(self):
+        return f'<Caption.Caption object lang_code: {self.lang} translated: {self.translated}>'
 
 
 class Captions:
@@ -130,10 +149,10 @@ class Captions:
         filtered_captions = list(filter((lambda subtitle: subtitle['name'].lower() == name.lower()),
                                         self.__translations))
         if len(filtered_captions) > 0:
-            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path)
+            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path, translated=True)
 
     def get_translated_captions_by_lang_code(self, lang_code: str) -> Caption:
         filtered_captions = list(filter((lambda subtitle: str(find(subtitle['name'])) == lang_code),
                                         self.__translations))
         if len(filtered_captions) > 0:
-            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path)
+            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path, translated=True)
