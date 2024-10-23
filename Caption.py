@@ -109,9 +109,9 @@ class Captions:
         self.raw_caption_data = caption_data
         self._subtitles = []
         self._translations = []
-        self.__subtitles = caption_data['json']['subtitles']
-        self.__translations = caption_data['json']['subtitlesAutoTrans']
-        self.subtitle_dl_api = caption_data['json']['urlSubtitle']
+        self.__subtitles = caption_data['json'].get('subtitles', list())
+        self.__translations = caption_data['json'].get('subtitlesAutoTrans', list())
+        self.subtitle_dl_api = caption_data['json'].get('urlSubtitle')
         self.download_path = download_path
 
     @property
