@@ -18,6 +18,7 @@ class Stream:
         self.resolution = resolution
         self.frame_rate = frame_rate
         self.bit_rate = bit_rate
+        self.abr = self.bit_rate
         self.file_name = file_name
         self.download_path = download_path
         if resolution == '360p':
