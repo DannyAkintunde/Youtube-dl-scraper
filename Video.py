@@ -13,9 +13,6 @@ class Video:
         self.captions = None
         self.duration = None
         self.streams = None
-        self.shares = None
-        self.views = None
-        self.comments = None
         self.owner = None
         self.title = None
         self.thumbnail = None
@@ -34,9 +31,9 @@ class Video:
             'width': int(thumbnail_img['width']),
             'height': int(thumbnail_img['height']),
             'url': thumbnail_img['src'],
-            'yt-thumb': self.caption_data['json']['thumbnail']
+            'yt-thumb': self.caption_data['json'].get('thumbnail')
         }
-        self.duration = self.caption_data['json']['duration']
+        self.duration = self.caption_data['json'].get('duration')
         video_info = self.soup.find('div', attrs={'class': 'icon-box-text'}).find('div', attrs={'class': 'text'})
         video_info_paragraphs = video_info.find_all('p')
         self.title = video_info_paragraphs[0].get_text()[6:].strip()
@@ -76,9 +73,15 @@ class Video:
         return {
             'title': self.title,
             'author': self.owner,
+            'view_url': self.view_url,
             'duration': self.duration,
             'thumbnail': self.thumbnail,
-            'down_url': self.streams.filter(is_audio=True)[2].url,
             'captions': self.captions.subtitles,
+            'resolutions': sorted(remove_duplicates(filter(lambda x: x is not None, [stream.resolution for stream in self.streams])), key= lambda char: int(char[:-1]),reverse=True),
+            'bit_rates': sorted(remove_duplicates(filter(lambda x: x is not None, [stream.abr for stream in self.streams.filter(only_audio=True)])), key= lambda char: int(char[:-4]),reverse=True),
             'translatable_captions': self.captions.translations
+            'down_url':{
+                "video": {stream.resolution: { 'url': stream.url, 'progressive': stream.progressive } for stream in self.streams},
+                "audio": {stream.abr: stream.url for stream in self.streams.filter(only_audio=True)}
+            }
         }
