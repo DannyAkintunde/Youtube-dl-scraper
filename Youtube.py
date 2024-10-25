@@ -119,41 +119,46 @@ class Youtube:
         ua.headers.accept_ch('Sec-CH-UA-Platform-Version, Sec-CH-Full-Version-List')
         return ua
 
-    def search(self, url: str) -> Video:
+    def search(self, url: str, only_caption: bool = True, only_video: bool = True) -> Video:
         browser_name = random.choice(list(self._browsers.keys()))
         browser = self._browsers[browser_name]
         context = browser.new_context(
             extra_http_headers=Youtube.generate_ua(browser_name).headers.get()
         )
         page = context.new_page()
-        page.goto(self.host)
-        page.fill('#aio-url-input', url)
-        page.click('#search-btn')
-        page.wait_for_selector('div#aio-parse-result')
+        download_data_html = ''
+        if not only_caption:
+            page.goto(self.host)
+            page.fill('#aio-url-input', url)
+            page.click('#search-btn')
+            page.wait_for_selector('div#aio-parse-result')
 
-        download_buttons_selector = "a.button.primary:not([href='javascript:void(0);'])"
+            download_buttons_selector = "a.button.primary:not([href='javascript:void(0);'])"
 
-        page.evaluate(f"""
-            let download_links = document.querySelectorAll("{download_buttons_selector}")
-            download_links.forEach((link) => link.addEventListener('click', (e) => e.preventDefault()))
-        """)
+            page.evaluate(f"""
+                let download_links = document.querySelectorAll("{download_buttons_selector}")
+                download_links.forEach((link) => link.addEventListener('click', (e) => e.preventDefault()))
+            """)
 
-        download_buttons = page.query_selector_all(download_buttons_selector)
+            download_buttons = page.query_selector_all(download_buttons_selector)
 
-        for button in download_buttons:
-            button.click()
+            for button in download_buttons:
+                button.click()
 
-        # print(self._context.cookies())
-
-        download_data_html = page.inner_html('div#aio-parse-result')
-        # print(self._download_data_html)
-
-        caption_data = self.get_caption_data(url, browser_context=context)
+            download_data_html = page.inner_html('div#aio-parse-result')
+        
+        caption_data = {
+            'json': dict(),
+            'status': 404,
+            'headers': dict()
+        }
+        if not only_video:
+            caption_data = self.get_caption_data(url, browser_context=context)
 
         page.close()
         context.close()
 
-        return Video(url, download_data_html, caption_data, self.download_location)
+        return Video(url, download_data_html, caption_data, self.download_location, caption_only=only_caption, video_only=only_video)
 
     def get_caption_data(self, url: str, browser_context: BrowserContext):
         if not browser_context:
@@ -183,7 +188,7 @@ class Youtube:
         page = context.new_page()
         page.route('https://get-info.downsub.com/*', caption_api_route_handler)
         try:
-            page.goto(f"{self.subtitle_host}?url={url}", timeout=30000)
+            page.goto(f"{self.subtitle_host}?url={url}", timeout=30000, wait_until='domcontentloaded')
             page.wait_for_selector(
                 "#app > div > main > div > div.container.ds-info.outlined > div > div.row.no-gutters > "
                 "div.pr-1.col-sm-7.col-md-6.col-12 > div.v-card.v-card--flat.v-sheet.theme--light > "
