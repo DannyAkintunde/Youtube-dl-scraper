@@ -73,17 +73,25 @@ class Youtube:
     _devices = ('desktop', 'mobile')
     _platforms = ('windows', 'macos', 'ios', 'linux', 'android')
 
-    def __init__(self, protocol: str = 'https', download_folder: str = 'downloads', **kwargs):
+    def __init__(self, protocol: str = 'https', download_folder: str = 'downloads', proxies : list[dict] = []):
         self.host = f'{protocol}://retatube.com'
         self.subtitle_host = f'{protocol}://downsub.com'
         self._host = 'retatube.com'
         self._subtitle_host = 'downsub.com'
         self._protocol = protocol
         self._playwright: Playwright = sync_playwright().start()
+        self.proxies = proxies
+        self.proxy = {}
+        
+        if len(self.proxies) > 1:
+            self.proxy = random.choice(self.proxies)
+        elif len(self.proxies) == 1:
+            self.proxy = self.proxies[0]
+
         self._browsers: dict[str, Browser] = {
-            'chromium': self._playwright.chromium.launch(),
-            'firefox': self._playwright.firefox.launch(),
-            'webkit': self._playwright.webkit.launch()
+            'chromium': self._playwright.chromium.launch(proxy=self.proxy),
+            'firefox': self._playwright.firefox.launch(proxy=self.proxy),
+            'webkit': self._playwright.webkit.launch(proxy=self.proxy)
         }
         self._page: Page | None = None
         self._browser: Browser | None = None
@@ -91,7 +99,7 @@ class Youtube:
         self._browser_name: str | None = None
         self._download_data_html: str | None = None
         self.download_location = download_folder
-
+        
         atexit.register(self.close)
         Path(self.download_location).mkdir(exist_ok=True, parents=True)
 
