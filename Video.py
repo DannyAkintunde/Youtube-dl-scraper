@@ -1,15 +1,15 @@
 import re
 from bs4 import BeautifulSoup
-from Stream import Stream
-from StreamArray import StreamArray
-from Caption import Captions
+from .Stream import Stream
+from .StreamArray import StreamArray
+from .Caption import Captions
 
 
 class Video:
     _quality_regex = r'\((\d+p)(\d+)?(\s[A-z]{2,3})?\)'
     _bit_rate_pattern = ['48kbps', '128kbps', '32kbps']
 
-    def __init__(self, view_url: str, raw_html='', caption_data: dict = {}, download_path: str, caption_only: bool = False, video_only: bool = False):
+    def __init__(self, view_url: str, raw_html='', caption_data: dict = {}, download_path: str = None, caption_only: bool = False, video_only: bool = False):
         self.captions = None
         self.duration = None
         self.streams = None
@@ -83,8 +83,8 @@ class Video:
             'thumbnail': self.thumbnail,
             'captions': self.captions.subtitles,
             'translatable_captions': self.captions.translations,
-            'resolutions': self.streams.get_available_resolutions() # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.resolution for stream in self.streams])), key= lambda char: int(char[:-1]),reverse=True),
-            'bit_rates': self.streams.get_available_bit_rates() # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.abr for stream in self.streams.filter(only_audio=True)])), key= lambda char: int(char[:-4]),reverse=True),
+            'resolutions': self.streams.get_available_resolutions(), # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.resolution for stream in self.streams])), key= lambda char: int(char[:-1]),reverse=True),
+            'bit_rates': self.streams.get_available_bit_rates(), # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.abr for stream in self.streams.filter(only_audio=True)])), key= lambda char: int(char[:-4]),reverse=True),
             'frame_rates': self.streams.get_available_frame_rates(),
             'streams': [str(stream) for stream in self.streams],
             'down_url':{

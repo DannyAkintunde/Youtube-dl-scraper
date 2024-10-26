@@ -2,7 +2,7 @@ import atexit
 import random
 import json
 from pathlib import Path
-from Video import Video
+from .Video import Video
 from ua_generator import generate as ua_gen
 from ua_generator.options import Options
 from playwright.sync_api import sync_playwright, Playwright, Browser, BrowserContext, Page, Route, TimeoutError
