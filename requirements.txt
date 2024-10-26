@@ -1,5 +1,5 @@
 ua-generator
-playwright
 tqdm
 langcodes
 beautifulsoup4
+playwright
