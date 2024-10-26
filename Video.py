@@ -9,7 +9,7 @@ class Video:
     _quality_regex = r'\((\d+p)(\d+)?(\s[A-z]{2,3})?\)'
     _bit_rate_pattern = ['48kbps', '128kbps', '32kbps']
 
-    def __init__(self, view_url: str, raw_html, caption_data, download_path: str):
+    def __init__(self, view_url: str, raw_html='', caption_data: dict = {}, download_path: str, caption_only: bool = False, video_only: bool = False):
         self.captions = None
         self.duration = None
         self.streams = None
@@ -22,8 +22,11 @@ class Video:
         self.view_url = view_url
         self.soup = BeautifulSoup(raw_html, 'html.parser')
         # print(self.soup)
-        self.parse_data()
-        self.parse_streams_data()
+        if not caption_only and video_only:
+          self.parse_data()
+          self.parse_streams_data()
+        if not video_only and caption_only:
+          self.parse_caption_data()
 
     def parse_data(self):
         thumbnail_img = self.soup.find('div', attrs={'class': 'icon-box-img'}).find('img')
@@ -38,7 +41,6 @@ class Video:
         video_info_paragraphs = video_info.find_all('p')
         self.title = video_info_paragraphs[0].get_text()[6:].strip()
         self.owner = video_info_paragraphs[1].get_text()[6:].strip()
-        self.captions = Captions(self.title, self.caption_data, self.download_path)
 
     def parse_streams_data(self):
         streams_data = self.soup.find_all("div", attrs={'class': 'col-inner'})[-1]
@@ -68,6 +70,9 @@ class Video:
                                 title=self.title,
                                 download_path=self.download_path)
                 self.streams._append(st_ins)
+    
+    def parse_caption_data(self):
+        self.captions = Captions(self.title, self.caption_data, self.download_path)
 
     def dict(self):
         return {
@@ -77,9 +82,11 @@ class Video:
             'duration': self.duration,
             'thumbnail': self.thumbnail,
             'captions': self.captions.subtitles,
-            'resolutions': sorted(remove_duplicates(filter(lambda x: x is not None, [stream.resolution for stream in self.streams])), key= lambda char: int(char[:-1]),reverse=True),
-            'bit_rates': sorted(remove_duplicates(filter(lambda x: x is not None, [stream.abr for stream in self.streams.filter(only_audio=True)])), key= lambda char: int(char[:-4]),reverse=True),
-            'translatable_captions': self.captions.translations
+            'translatable_captions': self.captions.translations,
+            'resolutions': self.streams.get_available_resolutions() # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.resolution for stream in self.streams])), key= lambda char: int(char[:-1]),reverse=True),
+            'bit_rates': self.streams.get_available_bit_rates() # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.abr for stream in self.streams.filter(only_audio=True)])), key= lambda char: int(char[:-4]),reverse=True),
+            'frame_rates': self.streams.get_available_frame_rates(),
+            'streams': [str(stream) for stream in self.streams],
             'down_url':{
                 "video": {stream.resolution: { 'url': stream.url, 'progressive': stream.progressive } for stream in self.streams},
                 "audio": {stream.abr: stream.url for stream in self.streams.filter(only_audio=True)}
