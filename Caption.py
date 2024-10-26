@@ -24,10 +24,10 @@ class Caption:
         self.title = title
         self.translated = translated
         self.lang = ('a.' if 'auto-generated' in caption_data.get('name') else '') + str(find(caption_data['name']))
+        self.lang_name = caption_data['name']
         self.download_dir = download_path
 
-    def srt(self, content=False, download_path: str | None = None, filename: str | None = None,
-            skip_existent: bool = False):
+    def srt(self, content=False, download_path: str | None = None, filename: str | None = None, skip_existent: bool = False):
         params = {
             'title': f'{self.title}-({self.lang})',
             'url': self.raw_caption_data['url'],
@@ -119,7 +119,9 @@ class Captions:
         for subtitle in self.__subtitles:
             subtitle_copy = subtitle.copy()
             subtitle_copy.pop('url')
-            self._subtitles.append(subtitle)
+            if 'auto' in subtitle_copy.get('name'):
+                subtitle_copy['code'] = 'a.' + str(find(subtitle_copy['name']))
+            self._subtitles.append(subtitle_copy)
 
         return self._subtitles
 
@@ -134,25 +136,37 @@ class Captions:
         return self._translations
 
     def get_captions_by_name(self, name: str) -> Caption:
-        filtered_captions = list(filter((lambda subtitle: subtitle['name'] == name),
+        filtered_captions = list(filter((lambda subtitle: name.lower() in subtitle.get('name', '').lower()),
                                         self.__subtitles))
-        if len(filtered_captions) > 0:
-            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path)
+        out = []
+        for caption in filtered_captions:
+            out.append(Caption(caption, self.subtitle_dl_api, self.title, self.download_path))
+        
+        return out
 
     def get_captions_by_lang_code(self, lang_code: str) -> Caption:
-        filtered_captions = list(filter((lambda subtitle: subtitle['code'] == lang_code),
+        filtered_captions = list(filter((lambda subtitle: lang_code.lower() == subtitle.get('code', '').lower()),
                                         self.__subtitles))
+        
         if len(filtered_captions) > 0:
             return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path)
-
+  
     def get_translated_captions_by_name(self, name: str) -> Caption:
-        filtered_captions = list(filter((lambda subtitle: subtitle['name'].lower() == name.lower()),
+        filtered_captions = list(filter((lambda subtitle: name.lower() in subtitle.get('name', '').lower()),
                                         self.__translations))
-        if len(filtered_captions) > 0:
-            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path, translated=True)
-
+        out = []
+        for caption in filtered_captions:
+            out.append(Caption(caption, self.subtitle_dl_api, self.title, self.download_path))
+        
+        return out
+  
     def get_translated_captions_by_lang_code(self, lang_code: str) -> Caption:
-        filtered_captions = list(filter((lambda subtitle: str(find(subtitle['name'])) == lang_code),
-                                        self.__translations))
+        try:
+            filtered_captions = list(filter((lambda subtitle: str(find(subtitle.get('name', ''))).lower() == lang_code.lower),
+                                            self.__translations))
+        except: # LookupError
+            return
+        
         if len(filtered_captions) > 0:
-            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path, translated=True)
+            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path)
+        
