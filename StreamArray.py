@@ -93,7 +93,7 @@ class StreamArray:
     
     def order_by(self, key):
         if not all([hasattr(stream, key) for stream in self.streams]): return
-        return StreamArray(**sorted(self.streams, key=(lambda stream: getattr(stream, key)), reverse=True)))
+        return StreamArray(**sorted(self.streams, key=(lambda stream: getattr(stream, key)), reverse=True))
         
     def first(self):
         if len(self) > 0:
