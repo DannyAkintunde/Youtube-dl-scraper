@@ -81,7 +81,7 @@ class Youtube:
         self._protocol = protocol
         self._playwright: Playwright = sync_playwright().start()
         self.proxies = proxies
-        self.proxy = {}
+        self.proxy = None
         
         if len(self.proxies) > 1:
             self.proxy = random.choice(self.proxies)
