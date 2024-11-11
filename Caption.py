@@ -156,17 +156,17 @@ class Captions:
                                         self.__translations))
         out = []
         for caption in filtered_captions:
-            out.append(Caption(caption, self.subtitle_dl_api, self.title, self.download_path))
+            out.append(Caption(caption, self.subtitle_dl_api, self.title, self.download_path, True))
         
         return out
   
     def get_translated_captions_by_lang_code(self, lang_code: str) -> Caption:
         try:
-            filtered_captions = list(filter((lambda subtitle: str(find(subtitle.get('name', ''))).lower() == lang_code.lower),
+            filtered_captions = list(filter((lambda subtitle: str(find(subtitle.get('name', ''))).lower() == lang_code.lower()),
                                             self.__translations))
         except: # LookupError
             return
         
         if len(filtered_captions) > 0:
-            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path)
+            return Caption(filtered_captions[0], self.subtitle_dl_api, self.title, self.download_path, True)
         
