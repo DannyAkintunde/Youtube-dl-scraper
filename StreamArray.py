@@ -67,7 +67,7 @@ class StreamArray:
         bit_rate = [stream.bit_rate for stream in self.streams if stream.is_video]
         return tuple(set(sorted(bit_rate, key=(lambda key: int(key[:-4]) if key else 0), reverse=True)))
 
-    def get_avaliable_frame_rates():
+    def get_avaliable_frame_rates(self):
         frame_rates = [stream.frame_rate for stream in self.streams if stream.is_video]
         return tuple(set(frame_rates))
       
