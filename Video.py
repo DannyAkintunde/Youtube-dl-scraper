@@ -22,11 +22,14 @@ class Video:
         self.view_url = view_url
         self.soup = BeautifulSoup(raw_html, 'html.parser')
         # print(self.soup)
+        self.parse_data()
         if not caption_only and video_only:
-          self.parse_data()
           self.parse_streams_data()
-        if not video_only and caption_only:
+        elif not video_only and caption_only:
           self.parse_caption_data()
+        else:
+            self.parse_streams_data()
+            self.parse_caption_data()
 
     def parse_data(self):
         thumbnail_img = self.soup.find('div', attrs={'class': 'icon-box-img'}).find('img')
@@ -83,12 +86,12 @@ class Video:
             'thumbnail': self.thumbnail,
             'captions': self.captions.subtitles,
             'translatable_captions': self.captions.translations,
-            'resolutions': self.streams.get_available_resolutions(), # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.resolution for stream in self.streams])), key= lambda char: int(char[:-1]),reverse=True),
+            'resolutions': self.streams.get_avaliable_resolutions(), # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.resolution for stream in self.streams])), key= lambda char: int(char[:-1]),reverse=True),
             'bit_rates': self.streams.get_available_bit_rates(), # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.abr for stream in self.streams.filter(only_audio=True)])), key= lambda char: int(char[:-4]),reverse=True),
-            'frame_rates': self.streams.get_available_frame_rates(),
+            'frame_rates': self.streams.get_avaliable_frame_rates(),
             'streams': [str(stream) for stream in self.streams],
             'down_url':{
                 "video": {stream.resolution: { 'url': stream.url, 'progressive': stream.progressive } for stream in self.streams},
-                "audio": {stream.abr: stream.url for stream in self.streams.filter(only_audio=True)}
+                "audio": {stream.abr: stream.url for stream in self.streams.filter(is_audio=True)}
             }
         }
