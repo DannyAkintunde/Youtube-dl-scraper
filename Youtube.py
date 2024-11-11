@@ -127,7 +127,7 @@ class Youtube:
         ua.headers.accept_ch('Sec-CH-UA-Platform-Version, Sec-CH-Full-Version-List')
         return ua
 
-    def search(self, url: str, only_caption: bool = True, only_video: bool = True) -> Video:
+    def search(self, url: str, only_caption: bool = False, only_video: bool = False) -> Video:
         browser_name = random.choice(list(self._browsers.keys()))
         browser = self._browsers[browser_name]
         context = browser.new_context(
