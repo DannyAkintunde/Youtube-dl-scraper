@@ -1,4 +1,4 @@
-from .Stream import Stream
+from Stream import Stream
 
 
 class StreamArray:
@@ -59,7 +59,7 @@ class StreamArray:
         if len(ordered_by_abr) > 0:
             return ordered_by_abr[0]
 
-    def get_avaliable_resolutions(self) -> tuple:
+    def get_available_resolutions(self) -> tuple:
         resolutions = [stream.resolution for stream in self.streams if stream.is_video]
         return tuple(set(sorted(resolutions, key=(lambda key: int(key[:-1]) if key else 0), reverse=True)))
     
