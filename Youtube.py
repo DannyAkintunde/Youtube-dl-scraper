@@ -1,7 +1,7 @@
 import random
 import json
 from pathlib import Path
-from Video import Video
+from .Video import Video
 from ua_generator import generate as ua_gen
 from ua_generator.options import Options
 from playwright.async_api import async_playwright, Playwright, Browser, BrowserContext, Page, Route, Error as PlaywrightError
