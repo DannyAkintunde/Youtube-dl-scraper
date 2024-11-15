@@ -1,8 +1,8 @@
 import re
 from bs4 import BeautifulSoup
-from Stream import Stream
-from StreamArray import StreamArray
-from Caption import Captions
+from .Stream import Stream
+from .StreamArray import StreamArray
+from .Caption import Captions
 
 
 class Video:
