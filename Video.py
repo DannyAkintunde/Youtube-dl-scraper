@@ -30,7 +30,6 @@ class Video:
         else:
             self.parse_streams_data()
             self.parse_caption_data()
-
     def parse_data(self):
         thumbnail_img = self.soup.find('div', attrs={'class': 'icon-box-img'}).find('img')
         self.thumbnail = {
@@ -86,7 +85,7 @@ class Video:
             'thumbnail': self.thumbnail,
             'captions': self.captions.subtitles,
             'translatable_captions': self.captions.translations,
-            'resolutions': self.streams.get_avaliable_resolutions(), # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.resolution for stream in self.streams])), key= lambda char: int(char[:-1]),reverse=True),
+            'resolutions': self.streams.get_available_resolutions(), # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.resolution for stream in self.streams])), key= lambda char: int(char[:-1]),reverse=True),
             'bit_rates': self.streams.get_available_bit_rates(), # sorted(remove_duplicates(filter(lambda x: x is not None, [stream.abr for stream in self.streams.filter(only_audio=True)])), key= lambda char: int(char[:-4]),reverse=True),
             'frame_rates': self.streams.get_avaliable_frame_rates(),
             'streams': [str(stream) for stream in self.streams],
