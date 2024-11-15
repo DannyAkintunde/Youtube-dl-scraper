@@ -64,7 +64,7 @@ class Stream:
                         print(f"Download completed: {file_name}")
                         return str(file_path.resolve())
                 else:
-                    print(f"Failed to download. Status code: {response.status_code}")
+                    print(f"Failed to download. Status code: {response.status_code}:403")
         except Exception as e:
             print(f"An error occured: {e}")
             raise e
