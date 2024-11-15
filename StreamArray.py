@@ -1,4 +1,4 @@
-from Stream import Stream
+from .Stream import Stream
 
 
 class StreamArray:
