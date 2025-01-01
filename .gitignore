@@ -6,3 +6,4 @@ test/
 main.py
 **/__pycache__/
 *.egg-info/
+site/
