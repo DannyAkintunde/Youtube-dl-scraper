@@ -1,6 +1,6 @@
 # YouTube DL Scraper
 
-![preview image](/images/preview.png)
+![preview image](https://raw.githubusercontent.com/DannyAkintunde/Youtube-dl-scraper/refs/heads/dev/images/preview.png)
 
 ## Introduction
 
