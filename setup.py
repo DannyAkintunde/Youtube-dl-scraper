@@ -2,8 +2,7 @@
 """This module contains setup instructions for pytube."""
 import os
 from setuptools import setup, find_packages
-from youtube_dl_scraper import __version__
-from youtube_dl_scraper import __author__
+from youtube_dl_scraper import __version__, __author__, __license__
 
 __dirname = os.path.abspath(os.path.dirname(__file__))
 
@@ -18,7 +17,7 @@ setup(
     author_email="dan29july@gmail.com",
     packages=find_packages(),
     package_data={"": ["LICENSE"],},
-    license="MIT",
+    license=__license__,
     url="https://github.com/DannyAkintunde/Youtube-dl-scraper/tree/dev",
     classifiers=[
         "Development Status :: 1 - Planning",
