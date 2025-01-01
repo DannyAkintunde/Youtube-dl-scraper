@@ -1,5 +1,0 @@
-ua-generator
-tqdm
-langcodes
-beautifulsoup4
-playwright
