@@ -1,4 +1,4 @@
-..gitignore
+.gitignore
 dist/
 build/
 downloads/
@@ -7,3 +7,4 @@ main.py
 **/__pycache__/
 *.egg-info/
 site/
+venv/
