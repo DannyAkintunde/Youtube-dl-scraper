@@ -33,7 +33,7 @@ def parse_duration(duration_str: str) -> str:
 
     Returns:
         str: A human-readable string representing the parsed duration, e.g., "2 hours, 15 minutes, 30 seconds".
-    
+
     Raises:
         ValueError: If the input duration string is not in a valid format.
     """

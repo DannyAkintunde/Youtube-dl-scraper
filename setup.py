@@ -16,7 +16,9 @@ setup(
     author=__author__,
     author_email="dan29july@gmail.com",
     packages=find_packages(),
-    package_data={"": ["LICENSE"],},
+    package_data={
+        "": ["LICENSE"],
+    },
     license=__license__,
     url="https://github.com/DannyAkintunde/Youtube-dl-scraper/tree/dev",
     classifiers=[
@@ -50,7 +52,9 @@ setup(
         "tqdm",
         "Unidecode",
     ],
-    project_urls={"Bug Reports": "https://github.com/DannyAkintunde/Youtube-dl-scraper/issues"},
+    project_urls={
+        "Bug Reports": "https://github.com/DannyAkintunde/Youtube-dl-scraper/issues"
+    },
     keywords=[
         "youtube",
         "download",

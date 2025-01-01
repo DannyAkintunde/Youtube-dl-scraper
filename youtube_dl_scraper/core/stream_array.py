@@ -1,12 +1,15 @@
 from typing import Self, Optional, List, Dict, Callable, Union
 from .stream import Stream, VideoStream, AudioStream
 
+
 class StreamArray:
     """
     A utility class to manage and manipulate a collection of video and audio streams.
     """
 
-    def __init__(self, **kwargs: Union[List[Stream], Dict[str, Union[Callable, List[Stream]]]]):
+    def __init__(
+        self, **kwargs: Union[List[Stream], Dict[str, Union[Callable, List[Stream]]]]
+    ):
         """
         Initialize the StreamArray object.
 
@@ -20,7 +23,7 @@ class StreamArray:
 
         if kwargs.get("streams"):
             self._streams.extend(kwargs["streams"])
-        
+
         # TODO: use the api_functions to get custom streams
         self._vid_stream_api = kwargs.get("video_api")
         self._aud_stream_api = kwargs.get("audio_api")
@@ -96,7 +99,7 @@ class StreamArray:
             *streams (Stream): Streams to add.
         """
         self._streams.extend(streams)
-    
+
     def _get_audio(self) -> list:
         aud_streams = filter((lambda stream: stream.is_audio), self.streams)
         ordered_by_abr = sorted(
@@ -122,7 +125,7 @@ class StreamArray:
                 ordered_by_frame_rate, key=(lambda stream: stream.is_hdr), reverse=True
             )
             return list(ordered_by_hdr)
-        
+
         return []
 
     def get_highest_bitrate(self) -> Optional[AudioStream]:
@@ -288,4 +291,3 @@ class StreamArray:
             return item
         else:
             raise StopIteration
-            

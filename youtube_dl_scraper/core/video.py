@@ -4,6 +4,7 @@ from .stream import VideoStream, AudioStream
 from youtube_dl_scraper.utils.format_time import format_duration
 from youtube_dl_scraper.utils import title_to_slug
 
+
 class Video:
     """Data class representing a video with streams and captions."""
 
@@ -35,7 +36,7 @@ class Video:
 
         Args:
             streams (dict): A dictionary containing stream data with keys 'video' and 'audio'.
-        
+
         Returns:
             StreamArray: An object containing parsed video and audio streams.
         """
@@ -45,7 +46,7 @@ class Video:
         audio_api = streams.get("audio_api", {})
 
         streams = StreamArray(video_api=video_api, audio_api=audio_api)
-        
+
         # Adding video streams
         for stream in video_streams:
             vid = VideoStream(

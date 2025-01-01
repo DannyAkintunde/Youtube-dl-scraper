@@ -188,6 +188,6 @@ class Caption:
 
     def __str__(self) -> str:
         return f"<caption.Caption object lang_code: {self.lang} translated: {self.translated}>"
-    
+
     def __repr__(self) -> str:
         return self.__str__()

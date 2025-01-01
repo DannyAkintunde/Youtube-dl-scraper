@@ -17,7 +17,7 @@ class VideoConverter(BaseConverter):
         force_render (bool): If True, forces re-rendering even if codecs match.
         experimental (bool): If True, allow for experimental codec supported by ffmpeg else don't.
     """
-    
+
     def __init__(
         self,
         input_path: str,
@@ -25,7 +25,7 @@ class VideoConverter(BaseConverter):
         video_codec: str,
         audio_codec: Optional[str],
         force_render: bool = False,
-        experimental: bool= True
+        experimental: bool = True,
     ):
         """
         Initialize the converter.
@@ -93,10 +93,8 @@ class VideoConverter(BaseConverter):
             output_video_codec = output_codecs["video"]
             output_audio_codec = output_codecs["audio"]
 
-            if (
-                output_video_codec == self.video_codec
-                and (output_audio_codec == self.audio_codec
-                or "aac")
+            if output_video_codec == self.video_codec and (
+                output_audio_codec == self.audio_codec or "aac"
             ):
                 print("Output file exists and matches specified codecs.")
                 return self.output_path
@@ -121,7 +119,15 @@ class VideoConverter(BaseConverter):
         ):
             print("Codecs match! Copying streams without re-rendering...")
             # Copy streams directly
-            (ffmpeg.input(self.input_path).output(self.output_path, codec="copy", strict=(self.experimental and 'experimental') or None).run())
+            (
+                ffmpeg.input(self.input_path)
+                .output(
+                    self.output_path,
+                    codec="copy",
+                    strict=(self.experimental and "experimental") or None,
+                )
+                .run()
+            )
         else:
             print("Re-rendering with specified codecs...")
             # Re-encode with specified codecs
@@ -131,7 +137,7 @@ class VideoConverter(BaseConverter):
                     self.output_path,
                     vcodec=self.video_codec or "copy",
                     acodec=self.audio_codec or "copy",
-                    strict=(self.experimental and 'experimental') or None
+                    strict=(self.experimental and "experimental") or None,
                 )
                 .run()
             )

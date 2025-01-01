@@ -5,7 +5,7 @@ from urllib.parse import urlparse, parse_qs
 def extract_video_id(url: str) -> Optional[str]:
     """
     Extracts video id from toutube video url
-    
+
     Args:
         url (str): Youtube URL to extract video id from.
     Returns:

@@ -17,6 +17,7 @@ class AudioConverter(BaseConverter):
         force_render (bool): If True, forces re-rendering even if codecs match.
         experimental (bool): If True, allow for experimental codec supported by ffmpeg else don't.
     """
+
     def __init__(
         self,
         input_path: str,
@@ -24,7 +25,7 @@ class AudioConverter(BaseConverter):
         audio_codec: Optional[str],
         bitrate: Optional[str] = None,
         force_render: bool = False,
-        experimental: bool = True
+        experimental: bool = True,
     ):
         """
         Initialize the converter.
@@ -121,7 +122,12 @@ class AudioConverter(BaseConverter):
             print("Codec matches! Copying audio stream without re-rendering...")
             (
                 ffmpeg.input(self.input_path)
-                .output(self.output_path, codec="copy", vn=None, strict=(self.experimental and 'experimental') or None)
+                .output(
+                    self.output_path,
+                    codec="copy",
+                    vn=None,
+                    strict=(self.experimental and "experimental") or None,
+                )
                 .run()
             )
         else:
@@ -134,7 +140,11 @@ class AudioConverter(BaseConverter):
 
             (
                 ffmpeg.input(self.input_path)
-                .output(self.output_path, **ffmpeg_output_options, strict=(self.experimental and 'experimental') or None)
+                .output(
+                    self.output_path,
+                    **ffmpeg_output_options,
+                    strict=(self.experimental and "experimental") or None,
+                )
                 .run()
             )
 

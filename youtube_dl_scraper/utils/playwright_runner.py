@@ -13,6 +13,7 @@ class Playwright:
         available_languages (list): A list of supported programming languages for remote code execution.
         server (str): The URL endpoint for the Playwright service.
     """
+
     available_languages = ["javascript", "python", "java", "csharp"]
     server = "https://try.playwright.tech/service/control/run"
 
@@ -26,14 +27,14 @@ class Playwright:
             language (str): The programming language in which the code is written. Default is "python".
 
         Returns:
-            dict: A dictionary containing the execution result with keys such as `status_code`, 
+            dict: A dictionary containing the execution result with keys such as `status_code`,
                   `success`, `error`, and `output`.
 
         Raises:
             ValueError: If the provided language is not supported.
             PlaywrightError: If an error occurs during the HTTP request or code execution.
         """
-        
+
         if language.lower() not in Playwright.available_languages:
             raise ValueError(
                 f"Language not supported. Supported languages are {Playwright.available_languages}"
@@ -58,8 +59,8 @@ class Playwright:
 
         try:
             response = session.post(Playwright.server, headers=headers, json=data)
-            response.raise_for_status()  
-            out = response.json()  
+            response.raise_for_status()
+            out = response.json()
             out["status_code"] = response.status_code
             return out
         except requests.exceptions.HTTPError as err:
