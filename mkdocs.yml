@@ -1,0 +1,176 @@
+site_name: Youtube DL Scraper
+# site_url: ""
+repo_url: https://github.com/DannyAkintunde/Youtube-dl-scraper
+repo_name: DannyAkintunde/Youtube-dl-scraper
+
+nav:
+  - Introduction: index.md
+  - overview.md
+  - Getting Started: 
+    - getting-started.md
+    - Tutorial:
+      - tutorials/tutorial.md
+      - Downloading a video: tutorials/downloading-a-video.md
+      - Working with Streams: tutorials/working-with-streams-and-streamarrays.md
+      - Working with Subtitles/Captions: tutorials/working-with-captions-captionarray.md
+      - Working with Formats and Codecs: tutorials/format-and-codec-conversion.md
+  - Reference:
+    - Converter:
+        - Audio_converter: reference/converter/audio_converter.md
+        - Base_converter: reference/converter/base_converter.md
+        - Video_converter: reference/converter/video_converter.md
+    - Core:
+        - Base_scraper: reference/core/base_scraper.md
+        - Caption: reference/core/caption.md
+        - Caption_array: reference/core/caption_array.md
+        - Exceptions: reference/core/exceptions.md
+        - Scraper_manager: reference/core/scraper_manager.md
+        - Stream: reference/core/stream.md
+        - Stream_array: reference/core/stream_array.md
+        - Video: reference/core/video.md
+        - Youtube: reference/core/youtube.md
+    - Site_scrapers:
+        - Caption_scrapers:
+          - Downsub: reference/site_scrapers/caption_scrapers/downsub.md
+          - __init__: reference/site_scrapers/caption_scrapers/__init__.md
+        - Video_scrapers:
+          - Savetube: reference/site_scrapers/video_scrapers/savetube.md
+          - Y2save: reference/site_scrapers/video_scrapers/y2save.md
+          - __init__: reference/site_scrapers/video_scrapers/__init__.md
+    - Utils:
+        - Extract_video_id: reference/utils/extract_video_id.md
+        - Filename_extractor: reference/utils/filename_extractor.md
+        - Format_time: reference/utils/format_time.md
+        - Playwright_runner: reference/utils/playwright_runner.md
+        - Registration: reference/utils/registration.md
+        - Title_to_slug: reference/utils/title_to_slug.md
+
+theme:
+  name: material
+  custom_dir: docs/.overrides
+  language: en
+  features:
+    - search.share
+    - search.suggest
+    - search.highlight
+    - navigation.tab
+    - navigation.tab.sticky
+    - navigation.sections
+    - navigation.footer
+    - navigation.top
+    - navigation.tracking
+    - navigation.path
+    - navigation.expand
+    - toc.follow
+    - toc.integrate
+    - header.autohide
+    - announce.dismiss
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - content.tabs.link
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+  
+    - media: "(prefers-color-scheme: light)"
+      primary: red
+      accent: pink
+      scheme: defualt
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to dark mode
+    
+    - media: "(prefers-color-scheme: dark)"
+      primary: pink
+      accent: red
+      scheme: slate
+      toggle:
+        icon: material/lightbulb
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+    
+plugins:
+  - search
+  # - mike
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+            docstring_style: google
+            show_root_heading: true
+            show_source: true
+            separate_signature: true
+            line_length: 80
+            show_signature_annotations: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            show_inheritance_diagram: true
+
+
+extra: 
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/DannyAkintunde
+      name: Our Github Repo
+  # version:
+  #  provider: mike
+  #  alias: true
+
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.superfences
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: DannyAkintunde
+      repo: Youtube-dl-scraper
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+copyright: Copyright &copy; 2024 Daniel Akintunde

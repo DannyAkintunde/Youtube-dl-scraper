@@ -1,0 +1,6 @@
+..gitignore
+dist/
+build/
+downloads/
+test/
+main.py
