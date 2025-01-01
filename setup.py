@@ -17,7 +17,9 @@ setup(
     author=__author__,
     author_email="dan29july@gmail.com",
     packages=find_packages(),
-    url="",
+    package_data={"": ["LICENSE"],},
+    license="MIT",
+    url="https://github.com/DannyAkintunde/Youtube-dl-scraper/tree/dev",
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",
