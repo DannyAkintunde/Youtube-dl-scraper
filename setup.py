@@ -51,7 +51,7 @@ setup(
         "tqdm",
         "Unidecode",
     ],
-    project_urls={"Bug Reports": ""},
+    project_urls={"Bug Reports": "https://github.com/DannyAkintunde/Youtube-dl-scraper/issues"},
     keywords=[
         "youtube",
         "download",
