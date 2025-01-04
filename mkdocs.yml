@@ -120,6 +120,12 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/DannyAkintunde
       name: Our Github Repo
+    - icon: simple/pypi
+      link: https://pypi.org/project/youtube-dl-scraper/
+      name: Pypi Package
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:dan29july@gmail.com
+      name: Contact Us
   # version:
   #  provider: mike
   #  alias: true

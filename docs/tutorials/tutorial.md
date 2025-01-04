@@ -7,9 +7,9 @@ Welcome to the tutorials section of the **YouTube DL Scraper** documentation. Th
 
     ---
 
-    Use [`youtube-dl-scraper`](../downloading-a-video/) to download your first video in minutes.
+    Use [`youtube-dl-scraper`](downloading-a-video.md) to download your first video in minutes.
 
-    [:octicons-arrow-right-24: Download your first video](../downloading-a-video/)
+    [:octicons-arrow-right-24: Download your first video](downloading-a-video.md)
 
 -   :material-play-box-multiple:{ .lg .middle } **Working with Streams**
 
@@ -17,7 +17,7 @@ Welcome to the tutorials section of the **YouTube DL Scraper** documentation. Th
 
     Learn about [`Streams`][youtube_dl_scraper.core.stream.Stream] and [`StreamArrays`][youtube_dl_scraper.core.stream_array.StreamArray]
 
-    [:octicons-arrow-right-24: Learn More](../working-with-streams-and-streamarrays/)
+    [:octicons-arrow-right-24: Learn More](working-with-streams-and-streamarrays.md)
 
 -   :material-closed-caption:{ .lg .middle } **Working with Captions**
 
@@ -25,7 +25,7 @@ Welcome to the tutorials section of the **YouTube DL Scraper** documentation. Th
 
     Learn about [`Captions`][youtube_dl_scraper.core.caption.Caption] and [`CaptionArrays`][youtube_dl_scraper.core.caption_array.CaptionArray], how to fetch captions.
 
-    [:octicons-arrow-right-24: Learn More](../working-with-captions-captionarray/)
+    [:octicons-arrow-right-24: Learn More](working-with-captions-captionarray.md)
 
 -   :simple-convertio:{ .lg .middle } **Format and Codec Conversion**
 
@@ -33,7 +33,7 @@ Welcome to the tutorials section of the **YouTube DL Scraper** documentation. Th
 
     Learn about `converters`, how to chage formats and codecs of videos/audios.
 
-    [:octicons-arrow-right-24: Learn More](../format-and-codec-conversion/)
+    [:octicons-arrow-right-24: Learn More](format-and-codec-conversion.md)
 
 </div>
 

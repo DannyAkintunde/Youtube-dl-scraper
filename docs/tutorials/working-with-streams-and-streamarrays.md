@@ -129,7 +129,7 @@ print(video.streams.get_audio_streams().order_by("abr")) # (1)!
 
 # Downloading Streams
 
-After you’ve selected the [Stream][youtube_dl_scraper.core.stream.Stream] you’re interested, you’re ready to interact with it. At this point, you can query information about the stream, such as its [size][youtube_dl_scraper.core.stream.Stream.size], whether the stream is audio/video, and more. You can also use the [download][youtube_dl_scraper.core.stream.Stream.download] method to save the file.
+After you’ve selected the [Stream][youtube_dl_scraper.core.stream.Stream] you’re interested, you’re ready to interact with it. At this point, you can query information about the stream, such as its [size][youtube_dl_scraper.core.stream.Stream], whether the stream is audio/video, and more. You can also use the [download][youtube_dl_scraper.core.stream.Stream.download] method to save the file.
 
 ```py linenums="11"
 print(video.streams.filter(resolution_value=720).download())

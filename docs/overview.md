@@ -20,7 +20,7 @@
 
 ### Install via pip <small>recommended</small> { #with-pip data-toc-label="with pip" }
 
-YouTube DL Scraper is published as a [Python package] and can be installed with
+YouTube DL Scraper is published as a [Python package](https://pypi.org/project/youtube-dl-scraper/) and can be installed with
 `pip`, ideally by using a [virtual environment](https://realpython.com/what-is-pip/#using-pip-in-a-python-virtual-environment)[^1]. Open up a terminal and install
 YouTube DL Scraper with:
 
