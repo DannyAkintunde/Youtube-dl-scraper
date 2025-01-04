@@ -11,7 +11,7 @@ To install **YouTube DL Scraper**, use the following command:
 === "Latest"
 
     ```sh
-    pip install youtube-dl-api
+    pip install youtube-dl-scraper
     ```
 
 ??? info "Alternatively"
