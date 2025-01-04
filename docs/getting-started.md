@@ -18,8 +18,8 @@ To install **YouTube DL Scraper**, use the following command:
     Alternatively, you can install it directly from the source:
 
     ```sh
-    git clone https://github.com/your-repo/youtube-dl-api.git
-    cd youtube-dl-api
+    git clone https://github.com/DannyAkintunde/Youtube-dl-scraper.git
+    cd Youtube-dl-scraper
     pip install .
     ```
 
