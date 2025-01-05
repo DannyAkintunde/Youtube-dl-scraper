@@ -241,18 +241,27 @@ class StreamArray:
         """
         return len(self.streams)
 
-    def __getitem__(self, index: int) -> Stream:
+    def __getitem__(self, index: Union[int, slice]) -> Stream:
         """
-        Access a stream by its index.
+        Access a stream by its index or sliced stream array by its slice.
 
         Args:
-            index (int): The index of the stream.
+            inputs (Union[int, slice]):
+                index (int): The index of the stream.
+                slice (slice): The slice of the streams.
 
         Returns:
-            Stream: The stream at the given index.
+            outputs (Union[Stream, StreamArray])
+                Stream: The stream at the given index.
+                StreamArray: The stream array from the slice.
         """
         try:
-            return self.streams[index]
+            if isinstance(index, slice):
+                return StreamArray(streams=list(self.streams[index]))
+            elif isinstance(index, int):
+                return self.streams[index]
+            else:
+                raise TypeError("Invalid argument type.")
         except IndexError:
             raise IndexError(f"No stream found at index: {index}")
 
