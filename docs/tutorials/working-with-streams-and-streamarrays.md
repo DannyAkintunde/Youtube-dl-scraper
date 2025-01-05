@@ -57,6 +57,22 @@ print(video.streams) # (1)!
     (audio 128), (audio 64), (audio 32))
     ```
 
+## Accessing Streams
+
+**YouTube DL Scraper** allows the accessing of specific streams based on index. It also supports slicing of [StreamArray][youtube_dl_scraper.core.stream_array.StreamArray]s.
+
+```py linenums="7"
+print(video.streams[0:3])
+```
+
+??? quote "output"
+
+    ```sh
+    ((video 1080p 30fps is_hdr=False has_audio=True), 
+    (video 720p 30fps is_hdr=False has_audio=True), 
+    (video 360p 30fps is_hdr=False has_audio=True))
+    ```
+
 ## Filtering Streams
 
 **YouTube DL Scraper** provides built-in functionality to filter streams available in a [StreamArray][youtube_dl_scraper.core.stream_array.StreamArray] object using the [`#!python filter()`][youtube_dl_scraper.core.stream_array.StreamArray.filter] method. This method supports various keyword arguments, allowing you to customize your search. Below, we’ll review some of the most commonly used options. For a complete list of filterable properties, refer to the API documentation for [youtube_dl_scraper.core.stream_array.StreamArray.filter][].
