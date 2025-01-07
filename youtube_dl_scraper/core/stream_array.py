@@ -246,7 +246,7 @@ class StreamArray:
         Access a stream by its index or sliced stream array by its slice.
 
         Args:
-            inputs (Union[int, slice]):
+            index (Union[int, slice]):
                 index (int): The index of the stream.
                 slice (slice): The slice of the streams.
 
