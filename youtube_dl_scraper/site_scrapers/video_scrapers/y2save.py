@@ -66,11 +66,14 @@ class Y2Save(BaseScraper):
 
         return self.parse_video_data(data["data"], url)
 
-    def convert(self, vid: str, key: str) -> str:
+    def convert(self, payload: dict) -> str:
         """Convert video or audio using the provided vid and key."""
         csrf_token = self.get_csrf_token()
-        payload = f"_token={csrf_token}&vid={vid}&key={key}"
-
+        # payload = f"_token={csrf_token}&{payload}"
+        payload = {
+            "_token": csrf_token,
+            **payload
+        }
         response = self.session.post(
             f"https://{self.__host__}/searchConvert", data=payload
         )
@@ -81,9 +84,8 @@ class Y2Save(BaseScraper):
             )
 
         data = response.json()
-        if data.get("status") != "ok":
+        if data.get("c_status") == "FAILED":
             raise ScraperExecutionError("Conversion failed")
-
         return data["dlink"]
 
     def parse_video_data(self, data: dict, url: str) -> dict:
@@ -112,8 +114,8 @@ class Y2Save(BaseScraper):
                     "quality": quality,
                     "label": stream["quality"].lower(),
                     "key": stream["key"],
-                    "args": [data["vid"], stream["key"]],
-                    "get_url": (lambda vid, key: self.convert(vid, key)),
+                    "args": [{"vid": data["vid"],"key": stream["key"]}],
+                    "get_url": (lambda payload: self.convert(payload)),
                 }
             )
 
@@ -125,8 +127,8 @@ class Y2Save(BaseScraper):
                     or 0,
                     "label": stream["quality"].lower(),
                     "key": stream["key"],
-                    "args": [data["vid"], stream["key"]],
-                    "get_url": (lambda vid, key: self.convert(vid, key)),
+                    "args": [{"vid": data["vid"],"key": stream["key"]}],
+                    "get_url": (lambda payload: self.convert(payload)),
                 }
             )
 
