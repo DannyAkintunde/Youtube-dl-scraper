@@ -30,7 +30,7 @@ class SaveTube(BaseScraper):
     ua_generator = UserAgent(platforms="pc")
 
     def generate_cdn(self) -> int:
-        cdn_list = [51,52, 53,54,56,57,58,59,60,61]
+        cdn_list = [51, 52, 53, 54, 56, 57, 58, 59, 60, 61]
         # return math.floor(random.random() * 11) + 51
         return random.choice(cdn_list)
 

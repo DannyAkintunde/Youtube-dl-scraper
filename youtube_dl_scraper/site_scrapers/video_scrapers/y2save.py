@@ -70,10 +70,7 @@ class Y2Save(BaseScraper):
         """Convert video or audio using the provided vid and key."""
         csrf_token = self.get_csrf_token()
         # payload = f"_token={csrf_token}&{payload}"
-        payload = {
-            "_token": csrf_token,
-            **payload
-        }
+        payload = {"_token": csrf_token, **payload}
         response = self.session.post(
             f"https://{self.__host__}/searchConvert", data=payload
         )
@@ -114,7 +111,7 @@ class Y2Save(BaseScraper):
                     "quality": quality,
                     "label": stream["quality"].lower(),
                     "key": stream["key"],
-                    "args": [{"vid": data["vid"],"key": stream["key"]}],
+                    "args": [{"vid": data["vid"], "key": stream["key"]}],
                     "get_url": (lambda payload: self.convert(payload)),
                 }
             )
@@ -127,7 +124,7 @@ class Y2Save(BaseScraper):
                     or 0,
                     "label": stream["quality"].lower(),
                     "key": stream["key"],
-                    "args": [{"vid": data["vid"],"key": stream["key"]}],
+                    "args": [{"vid": data["vid"], "key": stream["key"]}],
                     "get_url": (lambda payload: self.convert(payload)),
                 }
             )
