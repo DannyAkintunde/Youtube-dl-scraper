@@ -42,8 +42,9 @@ class Y2Save(BaseScraper):
         response = self.session.get(url)
 
         if response.status_code != 200:
-            raise YouTubeDLScraperError(
-                f"Error fetching CSRF token: invalid response code: {response.status_code}"
+            raise ScraperExecutionError(
+                self.__name__,
+                f"Error fetching CSRF token: invalid response code: {response.status_code}",
             )
 
         csrf_token = response.text.split('name="csrf-token" content="')[1].split('"')[0]
@@ -56,15 +57,16 @@ class Y2Save(BaseScraper):
         response = self.session.post(f"https://{self.__host__}/search", data=payload)
 
         if response.status_code != 200:
-            raise YouTubeDLScraperError(
-                f"Error occurred fetching video data: invalid response code: {response.status_code}"
+            raise ScraperExecutionError(
+                self.__name__,
+                f"Error occurred fetching video data: invalid response code: {response.status_code}",
             )
 
         data = response.json()
         if data.get("status") != "ok":
             raise VideoNotFoundError("No data found for the requested video")
 
-        return self.parse_video_data(data["data"], url)
+        return self.parse_video_data(data["data"])
 
     def convert(self, payload: dict) -> str:
         """Convert video or audio using the provided vid and key."""
@@ -76,21 +78,22 @@ class Y2Save(BaseScraper):
         )
 
         if response.status_code != 200:
-            raise YouTubeDLScraperError(
-                f"Error occurred during conversion: invalid response code: {response.status_code}"
+            raise ScraperExecutionError(
+                self.__name__,
+                f"Error occurred during conversion: invalid response code: {response.status_code}",
             )
 
         data = response.json()
         if data.get("c_status") == "FAILED":
-            raise ScraperExecutionError("Conversion failed")
+            raise ScraperExecutionError(self.__name__, "Conversion failed")
         return data["dlink"]
 
-    def parse_video_data(self, data: dict, url: str) -> dict:
+    def parse_video_data(self, data: dict) -> dict:
         """Parse video data into a structured format."""
         video_data = {
             "id": data["vid"],
             "title": data["title"],
-            "watch_url": url,
+            "watch_url": f"https://m.youtube.com/watch?v={data['vid']}",
             "thumbnail": data["thumbnail"],
             "duration": data["vduration"],
         }
