@@ -76,5 +76,5 @@ print(video.get_highest_resolution().download()) # (1)!
 
 1. Output: `#!python 'coding-levels-explained-what-makes-a-beginner-interm... .mp4'`
 
-[^1]: The curretly avaliable video scrapers are [mp3youtube](https://cov.mp3youtube.cc), [SaveTube](https://savetube.su) and [Y2Save](https://y2save.com).
+[^1]: The curretly avaliable video scrapers are [Mp3Youtube](https://conv.mp3youtube.cc), [SaveTube](https://savetube.su) and [Y2Save](https://y2save.com).
 [^2]: The only curretly avaliable caption scraper is [DownSub](https://downsub.com).
