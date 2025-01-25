@@ -2,6 +2,7 @@
 # from youtube_dl_scraper.core.base_scraoer import BaseScraper
 from youtube_dl_scraper.utils.registration import register_scrapers
 from .savetube import SaveTube
+from .mp3youtube import Mp3Youtube
 from .y2save import Y2Save
 
 
@@ -16,4 +17,5 @@ video_scrapers = scrapers
 
 # register scrapers
 register(SaveTube)
+register(Mp3Youtube)
 register(Y2Save)
