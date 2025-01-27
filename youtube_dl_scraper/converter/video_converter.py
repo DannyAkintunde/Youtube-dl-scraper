@@ -45,6 +45,23 @@ class VideoConverter(BaseConverter):
         self.force_render = force_render
         self.experimental = experimental
 
+    def delete_existing_output_file(self) -> bool:
+        if self.check_path(self.output_path):
+            output_codecs = self.get_codecs(self.output_path)
+            output_video_codec = output_codecs["video"]
+            output_audio_codec = output_codecs["audio"]
+
+            if output_video_codec == self.video_codec and output_audio_codec == (self.audio_codec or "aac") and not self.force_render:
+                print(
+                    f"Output file '{self.output_path}' already matches the desired codec."
+                )
+                return False
+            print(
+                "Output file exists but does not match the specified codec or force_render in enabled. Overwriting..."
+            )
+            os.remove(self.output_path)
+            return True
+
     @staticmethod
     def get_codecs(file_path: str) -> Dict[str, Optional[str]]:
         """
@@ -80,7 +97,7 @@ class VideoConverter(BaseConverter):
         Returns:
             str: Path to the converted video if successful.
         """
-        if not os.path.exists(self.input_path):
+        if not self.check_path(self.input_path):
             raise FileNotFoundError(f"Input file '{self.input_path}' not found.")
 
         # Handle output path being "."
@@ -88,19 +105,8 @@ class VideoConverter(BaseConverter):
             base, ext = os.path.splitext(self.input_path)
             self.output_path = f"{base}-converted{ext}"
 
-        if os.path.exists(self.output_path):
-            output_codecs = self.get_codecs(self.output_path)
-            output_video_codec = output_codecs["video"]
-            output_audio_codec = output_codecs["audio"]
-
-            if output_video_codec == self.video_codec and (
-                output_audio_codec == self.audio_codec or "aac"
-            ):
-                print("Output file exists and matches specified codecs.")
-                return self.output_path
-            else:
-                print("Output file exists, overwriting output file...")
-                os.remove(self.output_path)
+        if not self.delete_existing_output_file():
+            return self.output_path
 
         codecs = self.get_codecs(self.input_path)
         input_video_codec = codecs["video"]
@@ -111,6 +117,9 @@ class VideoConverter(BaseConverter):
         print(f"Output Video Codec: {self.video_codec}")
         print(f"Output Audio Codec: {self.audio_codec or 'copy'}")
 
+        ffmpeg_options = {
+            "strict": "experimental" if self.experimental else None,
+        }
         # Check if re-rendering is needed
         if (
             not self.force_render
@@ -119,31 +128,18 @@ class VideoConverter(BaseConverter):
         ):
             print("Codecs match! Copying streams without re-rendering...")
             # Copy streams directly
-            (
-                ffmpeg.input(self.input_path)
-                .output(
-                    self.output_path,
-                    codec="copy",
-                    strict=(self.experimental and "experimental") or None,
-                )
-                .run()
-            )
+            ffmpeg_options["codec"] = "copy"
         else:
             print("Re-rendering with specified codecs...")
             # Re-encode with specified codecs
-            (
-                ffmpeg.input(self.input_path)
-                .output(
-                    self.output_path,
-                    vcodec=self.video_codec or "copy",
-                    acodec=self.audio_codec or "copy",
-                    strict=(self.experimental and "experimental") or None,
-                )
-                .run()
-            )
+            ffmpeg_options["vcodec"] = self.video_codec or "copy"
+            ffmpeg_options["acodec"] = self.audio_codec or "copy"
 
-        if os.path.exists(self.output_path):
-            print(f"Video conversion complete! File saved at: {self.output_path}")
-            return self.output_path
-        else:
+        self.run_conversion(self.input_path, self.output_path, ffmpeg_options)
+
+        # Verify output file creation
+        if not self.check_path(self.output_path):
             raise FileNotFoundError("Output file was not created.")
+
+        print(f"Video conversion complete! File saved at: {self.output_path}")
+        return self.output_path
