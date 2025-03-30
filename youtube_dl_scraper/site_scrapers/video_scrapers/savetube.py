@@ -132,8 +132,9 @@ class SaveTube(BaseScraper):
             streams["video"].append(parsed_video_stream)
 
         video_data["streams"] = streams
-        return video_data
 
-    def custom_prop(self, obj, data: str):
-        obj.jpeg_thumbnail = data["jpeg_thumbnail"]  # custom property for this scraper
-        return obj
+        # handle custom properties
+        video_data["custom_props"] = {}
+        video_data["custom_props"]["jpeg_thumbnail"] = data["jpeg_thumbnail"]
+
+        return video_data

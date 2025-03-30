@@ -4,6 +4,7 @@ import requests
 import fleep
 from tqdm import tqdm
 from .exceptions import FileExistsError
+from youtube_dl_scraper.utils.filename_extractor import get_filename_from_cd
 
 
 def file_exists(filename: str, directory: Union[str, Path]) -> Optional[str]:
@@ -95,7 +96,6 @@ class Stream:
         download_path = download_dir or self.download_dir
         path = Path(download_path)
         path.mkdir(parents=True, exist_ok=True)
-        file_path = path / file_name
 
         if full_name := file_exists(file_name, path):
             if skip_existent:
@@ -108,8 +108,14 @@ class Stream:
             with requests.get(self.get_url(), stream=True) as response:
                 response.raise_for_status()
                 total_size = int(response.headers.get("content-length", 0))
+                file_ext = Path(
+                    get_filename_from_cd(
+                        response.headers.get("content-disposition") or ""
+                    )
+                ).suffix
+                file_path = path / (file_name + file_ext)
                 with file_path.open("wb") as file, tqdm(
-                    desc=f"Downloading {file_name}",
+                    desc=f"Downloading {file_name + file_ext}",
                     total=total_size if total_size > 0 else None,
                     unit="B",
                     unit_scale=True,
@@ -122,16 +128,17 @@ class Stream:
                             progress_bar.update(len(chunk))
 
                 print(f"Download completed: {file_name}")
-                with file_path.open("rb") as file:
-                    file_type = fleep.get(file.read(128))
-                    if file_type:
-                        print("Renaming file")
-                        extension = file_type.extension[0]
-                        new_file_path = file_path.with_suffix("." + extension)
-                        file_path.rename(new_file_path)
-                        if on_complete:
-                            on_complete(new_file_path)
-                        return str(new_file_path)
+                if not file_ext:
+                    with file_path.open("rb") as file:
+                        file_type = fleep.get(file.read(128))
+                        if file_type.extension:
+                            print("Renaming file")
+                            extension = file_type.extension[0]
+                            new_file_path = file_path.with_suffix("." + extension)
+                            file_path.rename(new_file_path)
+                            if on_complete:
+                                on_complete(new_file_path)
+                            return str(new_file_path)
                 if on_complete:
                     on_complete(file_path)
                 return str(file_path)

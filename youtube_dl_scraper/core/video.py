@@ -29,8 +29,16 @@ class Video:
         self.fduration = self.formatted_duration  # short hand to formatted_duration
         self.thumbnail = video_data.get("thumbnail")
         self._get_captions = None
+        self.__custom_props = video_data.get("custom_props", {})
 
-    def parse_streams(self, streams: dict) -> StreamArray:
+    def __getattr__(self, key):
+        if key in self.__custom_props:
+            return self.__custom_props[key]
+        raise AttributeError(
+            f"'{self.__class__.__name__}' object has no attribute '{key}'"
+        )
+
+    def __parse_streams(self, streams: dict) -> StreamArray:
         """
         Parse video and audio streams from the given stream data.
 
@@ -79,7 +87,7 @@ class Video:
             streams = streams()
         if not streams:
             raise KeyError("No streams found in video data")
-        return self.parse_streams(streams)
+        return self.__parse_streams(streams)
 
     @property
     def captions(self) -> CaptionArray:

@@ -23,8 +23,3 @@ class BaseScraper:
     async def async_scrape_captions(self, url: str):
         """Scrape youtube caprions data from site asynchronously"""
         raise NotImplementedError("This method should be overwritten")
-
-    # use to add custom props
-    def custom_prop(self, obj, data: str):
-        """adds custom properties in data to obj"""
-        return obj

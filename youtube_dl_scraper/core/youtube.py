@@ -59,9 +59,6 @@ class YouTube:
             video_data = self.video_scraper.scrape(url)
             vid = Video(video_data, self.download_path)
             vid._get_captions = lambda: self.scrape_captions(url)
-            vid = self.video_scraper.custom_prop(
-                vid, video_data
-            )  # add custom properties
             return vid
         except Exception as e:
             raise ScraperExecutionError(self.video_scraper_name, str(e))
@@ -82,9 +79,6 @@ class YouTube:
         try:
             video_data = await self.video_scraper.async_scrape(url)
             vid = Video(video_data, self.download_path)
-            vid = self.video_scraper.custom_prop(
-                vid, video_data
-            )  # add custom properties
             return vid
         except Exception as e:
             raise ScraperExecutionError(self.video_scraper_name, str(e))
@@ -105,9 +99,6 @@ class YouTube:
         try:
             caption_data = self.caption_scraper.scrape_captions(url)
             captions = CaptionArray(caption_data, self.download_path)
-            captions = self.caption_scraper.custom_prop(
-                captions, caption_data
-            )  # add custom properties
             return captions
         except Exception as e:
             raise ScraperExecutionError(self.caption_scraper_name, str(e))
@@ -128,9 +119,6 @@ class YouTube:
         try:
             caption_data = await self.caption_scraper.async_scrape(url)
             captions = CaptionArray(caption_data, self.download_path)
-            captions = self.caption_scraper.custom_prop(
-                captions, caption_data
-            )  # add custom properties
             return captions
         except Exception as e:
             raise ScraperExecutionError(self.caption_scraper_name, str(e))
